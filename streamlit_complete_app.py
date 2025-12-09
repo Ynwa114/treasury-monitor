@@ -12,6 +12,10 @@ from typing import Dict, List
 import json
 import os
 import transaction_fetcher
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configuration
 VAULT_API = "https://api.solana.fluid.io/v1/borrowing/vaults"
@@ -167,7 +171,7 @@ if 'last_update' not in st.session_state:
     st.session_state.last_update = None
 
 # Header
-st.title("💰 Fluid Protocol Treasury Monitor")
+st.title("💰 JupLend Treasury Monitor")
 st.markdown("### Solana Outstanding Rewards Dashboard")
 
 # Sidebar
@@ -249,7 +253,8 @@ with tab1:
     # Fetch current balance using Solscan API (CORRECTED)
     try:
         balance_url = "https://pro-api.solscan.io/v2.0/account/token-accounts"
-        headers = {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NTQyOTkxNzA4MzMsImVtYWlsIjoidG9vbHNAcmFjY29vbnMuZGV2IiwiYWN0aW9uIjoidG9rZW4tYXBpIiwiYXBpVmVyc2lvbiI6InYyIiwiaWF0IjoxNzU0Mjk5MTcwfQ.OjCC76Qy4IMVqzA6fXBI3uDQ2F7RjskOQATRztSsS_o"}
+        SOLSCAN_API_KEY = os.getenv('SOLSCAN_API_KEY')
+        headers = {"token": SOLSCAN_API_KEY}
         params = {
             "address": "Cvnta5ecoiCgNbLEXYm6kvhJMmRv3JM3ksKgTLVPg4hk",
             "type": "token",

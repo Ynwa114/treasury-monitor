@@ -1,13 +1,20 @@
-
+"""
+Treasury Transaction Fetcher using Solscan API
+Clean, simple, and it actually works!
+"""
 
 import requests
 import pandas as pd
 from datetime import datetime
 import json
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configuration
-SOLSCAN_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NTQyOTkxNzA4MzMsImVtYWlsIjoidG9vbHNAcmFjY29vbnMuZGV2IiwiYWN0aW9uIjoidG9rZW4tYXBpIiwiYXBpVmVyc2lvbiI6InYyIiwiaWF0IjoxNzU0Mjk5MTcwfQ.OjCC76Qy4IMVqzA6fXBI3uDQ2F7RjskOQATRztSsS_o"
+SOLSCAN_API_KEY = os.getenv('SOLSCAN_API_KEY')
 SOLSCAN_API_URL = "https://pro-api.solscan.io/v2.0/account/transfer"
 VAULT_API = "https://api.solana.fluid.io/v1/borrowing/vaults"
 TREASURY_ADDRESS = "Cvnta5ecoiCgNbLEXYm6kvhJMmRv3JM3ksKgTLVPg4hk"
@@ -93,6 +100,9 @@ def fetch_from_solscan(page=1, page_size=40):
     Returns: (data_list, success, error_message)
     """
     try:
+        if not SOLSCAN_API_KEY:
+            return [], {}, False, "SOLSCAN_API_KEY not found in environment variables"
+        
         url = f"{SOLSCAN_API_URL}?address={TREASURY_ADDRESS}&page={page}&page_size={page_size}&sort_by=block_time&sort_order=desc"
         headers = {"token": SOLSCAN_API_KEY}
         
